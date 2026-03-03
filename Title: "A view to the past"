@@ -1,0 +1,60 @@
+// Tempo
+setcpm(105/4)
+
+// TEXTURE
+let texture = s("crackle").density(0.3).gain(0.4).room(0.5)
+
+// GUITARE
+let guitarBase = note("<g#2 f#2>")
+  .struct("x ~ x x ~ x x ~") 
+  .s("gm_electric_guitar_muted")
+
+let guitarTop = note("<b3 a#3>")
+  .struct("~ x ~ ~ x ~ ~ x")
+  .s("gm_electric_guitar_clean")
+  .gain(0.6)
+  .room(0.5)
+
+let guitar = stack(guitarBase, guitarTop)
+
+// BEAT
+let beat = stack(
+  // Kick
+  s("bd(3,8)").bank("RolandTR808").distort(0.5).lpf(1000), 
+  
+  // Snare
+  s("~ sd").bank("RolandTR808").crush(4).gain(0.8), 
+  
+  // Hi-hats
+  s("hh*8").bank("RolandTR808")
+    .sometimes(x => x.ply(2)) 
+    .jux(rev)
+    .gain(sine.range(0.3, 0.6).fast(4)) 
+)
+
+// BASSE
+let bass = note("<g#1 f#1>")
+  .s("sawtooth")
+  .ftype("ladder")
+  .lpf(300).lpenv(2).lpq(5).decay(0.4)
+  .struct("x(3,8)")
+
+// SYNTHÉ
+let pad = chord("<G#m F#>")
+  .voicing()
+  .s("supersaw")
+  .lpf(sine.range(400, 1200).slow(8))
+  .room(0.8)
+  .gain(0.4)
+
+// ARRANGEMENT
+arrange(
+  // Intro
+  [2, stack(guitar, texture)], 
+  
+  // Couplet
+  [4, stack(guitar, texture, beat, bass)], 
+  
+  // Refrain
+  [4, stack(guitar, texture, beat, bass, pad)] 
+)
