@@ -1,2 +1,2 @@
 # Strudel
-Songs for strudel
+https://strudel.cc/ to play music
